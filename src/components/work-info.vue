@@ -1,26 +1,21 @@
 <template>
-  <div class="user">
+  <div class="work">
     <h5>   总计{{total}}条数据</h5>
 
 
 
     <el-form :inline="true" class="demo-form-inline" :loading="loading">
-      <el-form-item>
-
-      </el-form-item>
-
       <el-form-item label="姓名">
         <el-input v-model="search" placeholder="输入姓名查询"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="fetch">查询</el-button>
+        <el-button-group>
+          <el-button type="primary" @click="fetch">查询</el-button>
+          <el-button  @click="add_form.visible=true">增加劳务信息</el-button>
+        </el-button-group>
       </el-form-item>
-      <el-form-item>
-        <el-button  @click="add_form.visible=true">增加用户</el-button>
-      </el-form-item>
+
     </el-form>
-
-
       <el-table
         :data="list"
         style="width: 100%"
@@ -28,10 +23,12 @@
         size="small"
       >
         <el-table-column prop="id" label="id"></el-table-column>
-        <el-table-column prop="name" label="名字"></el-table-column>
-        <el-table-column prop="age"  label="年龄"></el-table-column>
-        <el-table-column prop="sex"  label="性别"></el-table-column>
-        <el-table-column prop="single" label="是否单身"></el-table-column>
+        <el-table-column prop="teacher" label="监考老师"></el-table-column>
+        <el-table-column prop="id_card"  label="年龄"></el-table-column>
+        <el-table-column prop="exam"  label="考试名称"></el-table-column>
+        <el-table-column prop="place" label="考试地点"></el-table-column>
+        <el-table-column prop="price" label="总计"></el-table-column>
+        <el-table-column prop="shui" label="税"></el-table-column>
         <el-table-column  label="操作" width="135" >
           <template scope="scope">
             <el-button-group>
@@ -44,23 +41,33 @@
       </el-table>
 
 
-    <el-dialog title="增加用户" :visible.sync="add_form.visible"
+    <el-dialog title="增加税务信息" :visible.sync="add_form.visible"
     >
       <el-form class="demo-form-inline" label-width="100px">
-        <el-form-item label="姓名">
-          <el-input v-model="add_form.name" placeholder="输入姓名"></el-input>
+        <el-form-item label="监考老师">
+          <el-input v-model="add_form.teacher" placeholder="输入姓名"></el-input>
         </el-form-item>
 
-        <el-form-item label="年龄">
-          <el-input v-model="add_form.age" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="老师身份证">
+          <el-input v-model="add_form.id_card" placeholder="输入老师身份证"></el-input>
         </el-form-item>
 
-        <el-form-item label="性别">
-          <el-input v-model="add_form.sex" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="考试名称">
+          <el-input v-model="add_form.exam" placeholder="输入考试名称"></el-input>
         </el-form-item>
 
-        <el-form-item label="单身">
-          <el-input v-model="add_form.single" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="考试地点">
+          <el-input v-model="add_form.place" placeholder="输入考试地点"></el-input>
+        </el-form-item>
+
+
+        <el-form-item label="总计">
+          <el-input v-model="add_form.price" placeholder="输入price"></el-input>
+        </el-form-item>
+
+
+        <el-form-item label="税">
+          <el-input v-model="add_form.shui" placeholder="输入税"></el-input>
         </el-form-item>
       </el-form>
 
@@ -72,24 +79,33 @@
     </el-dialog>
 
 
-    <el-dialog title="编辑用户" :visible.sync="edit_form.visible"
+    <el-dialog title="编辑劳务信息" :visible.sync="edit_form.visible"
     >
-      <el-form class="demo-form-inline"  label-width="100px">
-
-        <el-form-item label="姓名">
-          <el-input v-model="edit_form.name" placeholder="输入姓名"></el-input>
+      <el-form class="demo-form-inline" label-width="100px">
+        <el-form-item label="监考老师">
+          <el-input v-model="edit_form.teacher" placeholder="输入姓名"></el-input>
         </el-form-item>
 
-        <el-form-item label="年龄">
-          <el-input v-model="edit_form.age" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="老师身份证">
+          <el-input v-model="edit_form.id_card" placeholder="输入老师身份证"></el-input>
         </el-form-item>
 
-        <el-form-item label="性别">
-          <el-input v-model="edit_form.sex" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="考试名称">
+          <el-input v-model="edit_form.exam" placeholder="输入考试名称"></el-input>
         </el-form-item>
 
-        <el-form-item label="单身">
-          <el-input v-model="edit_form.single" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="考试地点">
+          <el-input v-model="edit_form.place" placeholder="输入考试地点"></el-input>
+        </el-form-item>
+
+
+        <el-form-item label="总计">
+          <el-input v-model="edit_form.price" placeholder="输入price"></el-input>
+        </el-form-item>
+
+
+        <el-form-item label="税">
+          <el-input v-model="edit_form.shui" placeholder="输入税"></el-input>
         </el-form-item>
       </el-form>
 
@@ -122,7 +138,7 @@
 
 export default {
   components: {ElButtonGroup},
-  name: 'user',
+  name: 'work-info',
   data () {
     return {
       list:[],
@@ -132,17 +148,23 @@ export default {
       current_page:1,
       loading:false,
       add_form:{
-        name:'',
-        age:'',
-        sex:'',
-        single:'',
+        teacher:'',
+        id_card:'',
+        exam:'',
+        place:'',
+        price:'',
+        shui:'',
+        id:'',
         visible:false
       },
       edit_form:{
-        name:'',
-        age:'',
-        sex:'',
-        single:'',
+        teacher:'',
+        id_card:'',
+        exam:'',
+        place:'',
+        price:'',
+        shui:'',
+        id:'',
         visible:false
       }
     }
@@ -163,11 +185,13 @@ export default {
           data.visible = true
           this.edit_form = {
               visible:true,
-              name:data.name,
-              single:data.single,
-              sex:data.sex,
-              age:data.age ,
-              id:data.id
+              teacher:data.teacher,
+              id_card:data.id_card,
+              exam:data.exam,
+              place:data.place,
+              price:data.price,
+              shui:data.shui,
+              id:data.id,
           }
       },
       async fetch(){
@@ -177,11 +201,11 @@ export default {
               search = this.search
 
           this.loading = true
-          var response = await request.get('/func/bbb',{
+          var response = await request.get('/func/ccc',{
               params:{
                   _limit,
                   _page,
-                  name_like:search
+
               }
           })
           this.list = response.data.list
@@ -191,11 +215,11 @@ export default {
       async add(){
           var add_form = this.add_form
           delete add_form.visible
-          var response = await request.post('/data/ryan/user/',add_form)
+          var response = await request.post('/data/ryan/work/',add_form)
           this.fetch()
       },
       async remove(data){
-        var response = await request.delete('/data/ryan/user/'+data.id)
+        var response = await request.delete('/data/ryan/work/'+data.id)
         this.fetch()
       },
       async edit(){
@@ -204,7 +228,7 @@ export default {
         var id = edit_form.id
         delete edit_form.id
         delete edit_form.visible
-        var response = await request.patch('/data/ryan/user/'+id,edit_form)
+        var response = await request.patch('/data/ryan/work/'+id,edit_form)
         this.fetch()
       }
   },
@@ -219,7 +243,7 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
-.user{
+.work{
   box-sizing:border-box;
   padding:20px;
 }

@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import user from '@/components/user'
-import good from '@/components/good'
-import record from '@/components/record'
+import teacherInfo from '../components/teacher-info.vue'
+import examInfo from '../components/exam-info.vue'
+import workInfo from '../components/work-info.vue'
+import login from '../components/login.vue'
+// import record from '@/components/record'
 Vue.use(Router)
 
 export default new Router({
@@ -13,19 +16,19 @@ export default new Router({
       component: user
     },
     {
-      path: '/user',
-      name: 'user',
-      component: user
+      path: '/exam',
+      name: 'exam',
+      component: examInfo
     },
     {
-      path: '/good',
-      name: 'good',
-      component: good
+      path: '/work',
+      name: 'work',
+      component: workInfo
     },
     {
-      path: '/record',
-      name: 'record',
-      component: record
+      path: '/teacher',
+      name: 'teacher',
+      component: teacherInfo
     }
   ]
 })

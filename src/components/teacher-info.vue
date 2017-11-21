@@ -1,5 +1,5 @@
 <template>
-  <div class="user">
+  <div class="teacher">
     <h5>   总计{{total}}条数据</h5>
 
 
@@ -13,11 +13,12 @@
         <el-input v-model="search" placeholder="输入姓名查询"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="fetch">查询</el-button>
+        <el-button-group>
+          <el-button type="primary" @click="fetch">查询</el-button>
+          <el-button  @click="add_form.visible=true">增加老师</el-button>
+        </el-button-group>
       </el-form-item>
-      <el-form-item>
-        <el-button  @click="add_form.visible=true">增加用户</el-button>
-      </el-form-item>
+
     </el-form>
 
 
@@ -31,7 +32,9 @@
         <el-table-column prop="name" label="名字"></el-table-column>
         <el-table-column prop="age"  label="年龄"></el-table-column>
         <el-table-column prop="sex"  label="性别"></el-table-column>
-        <el-table-column prop="single" label="是否单身"></el-table-column>
+        <el-table-column prop="phone" label="电话"></el-table-column>
+        <el-table-column prop="id_card"  label="身份证"></el-table-column>
+        <el-table-column prop="place"  label="住址"></el-table-column>
         <el-table-column  label="操作" width="135" >
           <template scope="scope">
             <el-button-group>
@@ -44,7 +47,7 @@
       </el-table>
 
 
-    <el-dialog title="增加用户" :visible.sync="add_form.visible"
+    <el-dialog title="增加老师信息" :visible.sync="add_form.visible"
     >
       <el-form class="demo-form-inline" label-width="100px">
         <el-form-item label="姓名">
@@ -52,15 +55,23 @@
         </el-form-item>
 
         <el-form-item label="年龄">
-          <el-input v-model="add_form.age" placeholder="输入姓名查询"></el-input>
+          <el-input v-model="add_form.age" placeholder="输入年龄"></el-input>
         </el-form-item>
 
         <el-form-item label="性别">
-          <el-input v-model="add_form.sex" placeholder="输入姓名查询"></el-input>
+          <el-input v-model="add_form.sex" placeholder="输入性别"></el-input>
         </el-form-item>
 
-        <el-form-item label="单身">
-          <el-input v-model="add_form.single" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="电话">
+          <el-input v-model="add_form.phone" placeholder="输入电话"></el-input>
+        </el-form-item>
+
+        <el-form-item label="身份证">
+          <el-input v-model="add_form.id_card" placeholder="输入身份证"></el-input>
+        </el-form-item>
+
+        <el-form-item label="住址">
+          <el-input v-model="add_form.place" placeholder="输入住址"></el-input>
         </el-form-item>
       </el-form>
 
@@ -72,7 +83,7 @@
     </el-dialog>
 
 
-    <el-dialog title="编辑用户" :visible.sync="edit_form.visible"
+    <el-dialog title="编辑老师信息" :visible.sync="edit_form.visible"
     >
       <el-form class="demo-form-inline"  label-width="100px">
 
@@ -81,15 +92,23 @@
         </el-form-item>
 
         <el-form-item label="年龄">
-          <el-input v-model="edit_form.age" placeholder="输入姓名查询"></el-input>
+          <el-input v-model="edit_form.age" placeholder="输入年龄"></el-input>
         </el-form-item>
 
         <el-form-item label="性别">
-          <el-input v-model="edit_form.sex" placeholder="输入姓名查询"></el-input>
+          <el-input v-model="edit_form.sex" placeholder="输入性别"></el-input>
         </el-form-item>
 
-        <el-form-item label="单身">
-          <el-input v-model="edit_form.single" placeholder="输入姓名查询"></el-input>
+        <el-form-item label="电话">
+          <el-input v-model="edit_form.phone" placeholder="输入电话"></el-input>
+        </el-form-item>
+
+        <el-form-item label="身份证">
+          <el-input v-model="edit_form.id_card" placeholder="输入身份证"></el-input>
+        </el-form-item>
+
+        <el-form-item label="住址">
+          <el-input v-model="edit_form.place" placeholder="输入住址"></el-input>
         </el-form-item>
       </el-form>
 
@@ -122,7 +141,7 @@
 
 export default {
   components: {ElButtonGroup},
-  name: 'user',
+  name: 'teacher-info',
   data () {
     return {
       list:[],
@@ -135,7 +154,9 @@ export default {
         name:'',
         age:'',
         sex:'',
-        single:'',
+        id_card:'',
+        phone:'',
+        place:'',
         visible:false
       },
       edit_form:{
@@ -143,6 +164,9 @@ export default {
         age:'',
         sex:'',
         single:'',
+        id_card:'',
+        phone:'',
+        place:'',
         visible:false
       }
     }
@@ -164,7 +188,9 @@ export default {
           this.edit_form = {
               visible:true,
               name:data.name,
-              single:data.single,
+              id_card:data.id_card,
+              phone:data.phone,
+              place:data.place,
               sex:data.sex,
               age:data.age ,
               id:data.id
@@ -191,11 +217,11 @@ export default {
       async add(){
           var add_form = this.add_form
           delete add_form.visible
-          var response = await request.post('/data/ryan/user/',add_form)
+          var response = await request.post('/data/ryan/teacher/',add_form)
           this.fetch()
       },
       async remove(data){
-        var response = await request.delete('/data/ryan/user/'+data.id)
+        var response = await request.delete('/data/ryan/teacher/'+data.id)
         this.fetch()
       },
       async edit(){
@@ -204,7 +230,7 @@ export default {
         var id = edit_form.id
         delete edit_form.id
         delete edit_form.visible
-        var response = await request.patch('/data/ryan/user/'+id,edit_form)
+        var response = await request.patch('/data/ryan/teacher/'+id,edit_form)
         this.fetch()
       }
   },
@@ -219,7 +245,7 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
-.user{
+.teacher{
   box-sizing:border-box;
   padding:20px;
 }
