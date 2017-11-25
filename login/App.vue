@@ -1,7 +1,7 @@
 <template>
   <div class="app" id="app">
     <div class="login-container">
-      <el-form class="card-box login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
+      <el-form class="card-box login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" action="/login/">
         <h3 class="title">系统登录</h3>
 
         <el-form-item prop="username">
@@ -20,7 +20,7 @@
           <span class='show-pwd' @click='showPwd'><icon-svg icon-class="eye" /></span>
         </el-form-item>
 
-        <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+        <el-button type="submit" style="width:100%;margin-bottom:30px;"  >登录</el-button>
 
 
       </el-form>

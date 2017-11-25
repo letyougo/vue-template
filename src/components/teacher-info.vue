@@ -16,6 +16,7 @@
         <el-button-group>
           <el-button type="primary" @click="fetch">查询</el-button>
           <el-button  @click="add_form.visible=true">增加老师</el-button>
+          <el-button  @click="muti_idcard.visible=true">批量上传身份证</el-button>
         </el-button-group>
       </el-form-item>
 
@@ -30,11 +31,11 @@
       >
         <el-table-column prop="id" label="id"></el-table-column>
         <el-table-column prop="name" label="名字"></el-table-column>
-        <el-table-column prop="age"  label="年龄"></el-table-column>
+        <el-table-column prop="idcard"  label="身份证"></el-table-column>
+        <el-table-column prop="location"  label="住址"></el-table-column>
+        <el-table-column prop="province" label="籍贯"></el-table-column>
         <el-table-column prop="sex"  label="性别"></el-table-column>
-        <el-table-column prop="phone" label="电话"></el-table-column>
-        <el-table-column prop="id_card"  label="身份证"></el-table-column>
-        <el-table-column prop="place"  label="住址"></el-table-column>
+
         <el-table-column  label="操作" width="135" >
           <template scope="scope">
             <el-button-group>
@@ -49,36 +50,82 @@
 
     <el-dialog title="增加老师信息" :visible.sync="add_form.visible"
     >
-      <el-form class="demo-form-inline" label-width="100px">
-        <el-form-item label="姓名">
-          <el-input v-model="add_form.name" placeholder="输入姓名"></el-input>
-        </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form class="demo-form-inline" label-width="60px">
+            <el-form-item label="姓名">
+              <el-input v-model="add_form.name" placeholder="输入姓名"></el-input>
+            </el-form-item>
 
-        <el-form-item label="年龄">
-          <el-input v-model="add_form.age" placeholder="输入年龄"></el-input>
-        </el-form-item>
+            <el-form-item label="年龄">
+              <el-input v-model="add_form.idcard" placeholder="身份证"></el-input>
+            </el-form-item>
 
-        <el-form-item label="性别">
-          <el-input v-model="add_form.sex" placeholder="输入性别"></el-input>
-        </el-form-item>
+            <el-form-item label="性别">
+              <el-input v-model="add_form.location" placeholder="输入地址"></el-input>
+            </el-form-item>
 
-        <el-form-item label="电话">
-          <el-input v-model="add_form.phone" placeholder="输入电话"></el-input>
-        </el-form-item>
+            <el-form-item label="电话">
+              <el-input v-model="add_form.sex" placeholder="输入性别"></el-input>
+            </el-form-item>
 
-        <el-form-item label="身份证">
-          <el-input v-model="add_form.id_card" placeholder="输入身份证"></el-input>
-        </el-form-item>
-
-        <el-form-item label="住址">
-          <el-input v-model="add_form.place" placeholder="输入住址"></el-input>
-        </el-form-item>
-      </el-form>
+            <el-form-item label="籍贯">
+              <el-input v-model="add_form.province" placeholder="输入籍贯"></el-input>
+            </el-form-item>
 
 
-        <span slot="footer" class="dialog-footer">
+
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+
+          <el-upload
+            class="upload-demo"
+            drag
+            action="https://jsonplaceholder.typicode.com/posts/"
+            multiple
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :auto-upload="false"
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-col>
+      </el-row>
+
+      <span slot="footer" class="dialog-footer">
           <el-button @click="add_form.visible=false" size="small">取 消</el-button>
           <el-button type="primary" @click="add" size="small">确 定</el-button>
+        </span>
+
+    </el-dialog>
+
+    <el-dialog title="批量上传身份证" :visible=" muti_idcard.visible ">
+
+      <el-upload
+        class="upload-demo"
+        drag
+        action="https://jsonplaceholder.typicode.com/posts/"
+        multiple
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :file-list="fileList"
+        :auto-upload="false"
+        style="width: 100%"
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="muti_idcard.visible=false">取 消</el-button>
+          <el-button type="primary" @click="edit">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -92,23 +139,19 @@
         </el-form-item>
 
         <el-form-item label="年龄">
-          <el-input v-model="edit_form.age" placeholder="输入年龄"></el-input>
+          <el-input v-model="edit_form.idcard" placeholder="身份证"></el-input>
         </el-form-item>
 
         <el-form-item label="性别">
-          <el-input v-model="edit_form.sex" placeholder="输入性别"></el-input>
+          <el-input v-model="edit_form.location" placeholder="输入地址"></el-input>
         </el-form-item>
 
         <el-form-item label="电话">
-          <el-input v-model="edit_form.phone" placeholder="输入电话"></el-input>
+          <el-input v-model="edit_form.sex" placeholder="输入性别"></el-input>
         </el-form-item>
 
-        <el-form-item label="身份证">
-          <el-input v-model="edit_form.id_card" placeholder="输入身份证"></el-input>
-        </el-form-item>
-
-        <el-form-item label="住址">
-          <el-input v-model="edit_form.place" placeholder="输入住址"></el-input>
+        <el-form-item label="籍贯">
+          <el-input v-model="edit_form.province" placeholder="输入籍贯"></el-input>
         </el-form-item>
       </el-form>
 
@@ -135,12 +178,15 @@
 <script>
   import axios from 'axios'
   import ElButtonGroup from "../../node_modules/element-ui/packages/button/src/button-group.vue";
+  import ElDialog from "../../node_modules/element-ui/packages/dialog/src/component.vue";
   var request = axios.create({
-    baseURL:'http://123.56.3.23:8888'
+    baseURL:'http://localhost:8000'
   })
 
 export default {
-  components: {ElButtonGroup},
+  components: {
+    ElDialog,
+    ElButtonGroup},
   name: 'teacher-info',
   data () {
     return {
@@ -152,23 +198,24 @@ export default {
       loading:false,
       add_form:{
         name:'',
-        age:'',
+        idcard:'',
+        location:'',
+        province:'',
         sex:'',
-        id_card:'',
-        phone:'',
-        place:'',
         visible:false
       },
       edit_form:{
         name:'',
-        age:'',
+        idcard:'',
+        location:'',
+        province:'',
         sex:'',
-        single:'',
-        id_card:'',
-        phone:'',
-        place:'',
         visible:false
-      }
+      },
+      muti_idcard:{
+        visible:false
+      },
+      fileList:[]
     }
   },
 
@@ -179,6 +226,9 @@ export default {
   },
 
   methods:{
+    handlePreview(){},
+    handleRemove(){},
+    submitUpload(){},
       change_page(p){
           console.log(p)
       },
@@ -188,12 +238,11 @@ export default {
           this.edit_form = {
               visible:true,
               name:data.name,
-              id_card:data.id_card,
-              phone:data.phone,
-              place:data.place,
+              idcard:data.idcard,
+              location:data.location,
+              province:data.province,
               sex:data.sex,
-              age:data.age ,
-              id:data.id
+
           }
       },
       async fetch(){
@@ -203,14 +252,14 @@ export default {
               search = this.search
 
           this.loading = true
-          var response = await request.get('/func/bbb',{
+          var response = await request.get('/api/school_client/teacher/',{
               params:{
                   _limit,
                   _page,
                   name_like:search
               }
           })
-          this.list = response.data.list
+          this.list = response.data.objects
           this.total = response.data.total
           this.loading = false
       },
@@ -241,7 +290,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style >
 h1, h2 {
   font-weight: normal;
 }
@@ -262,4 +311,9 @@ li {
 a {
   color: #42b983;
 }
+
+  .el-upload-dragger,.el-upload{
+    display: block;
+    width: 100%;
+  }
 </style>

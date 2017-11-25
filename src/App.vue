@@ -2,7 +2,7 @@
   <div id="app">
     <div class="top-bar">
       <div>考试管理系统</div>
-      <span class="name">欢迎admin</span>
+      <span class="name">欢迎&nbsp;&nbsp;{{user}}&nbsp;&nbsp;<a href="/logout">退出</a></span>
     </div>
     <el-row>
       <el-col :span="2">
@@ -47,7 +47,8 @@ export default {
   data(){
       var name = this.$route.path
       return {
-          name
+          name,
+          user:window.user
       }
   },
   methods:{
